@@ -1,10 +1,11 @@
 """ TestBucketConnectorMethods"""
+from xetra_123.xetra.common.s3 import S3BucketConnector
 import os
-import unittest
+import pytest
 import boto3
+import unittest
 from moto import mock_s3
 
-from xetra_123.xetra.common.s3 import S3BucketConnector
 
 """
 Purpose: Testing the S3BucketConnector class
@@ -31,7 +32,7 @@ class TestBucketConnectorMethods(unittest.TestCase):
         #Creating a bucket on the mocked s3
         self.s3 = boto3.resource(service_name='s3', endpoint_url=self.s3_endpoint_url)
         self.s3.create_bucket(Bucket=self.s3_bucket_name,
-                              CreateBucketConfiguration={
+                               CreateBucketConfiguration={
                                   'LocationConstraint': 'eu-central-1'
                               })
         self.s3_bucket = self.s3.Bucket(self.s3_bucket_name)
@@ -53,7 +54,6 @@ class TestBucketConnectorMethods(unittest.TestCase):
     for getting 2 file keys as list on the mocked s3 bucket
     """
     def test_list_files_in_prefix_ok(self):
-
         #Expected results
         prefix_exp = 'prefix/'
         key1_exp = f'{prefix_exp}test1.csv'
@@ -76,9 +76,9 @@ class TestBucketConnectorMethods(unittest.TestCase):
         #CleanUp after tests
         self.s3_bucket.delete_objects(
             Delete={
-                'Objects':[
+                'Objects': [
                     {
-                        'Key':key1_exp
+                        'Key': key1_exp
                     },
                     {
                         'Key': key2_exp
@@ -102,6 +102,11 @@ class TestBucketConnectorMethods(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+    #pytest.main()
+    #test = TestBucketConnectorMethods()
+    #test.test_list_files_in_prefix_ok()
+    # test.test_list_files_in_prefix_wrong_prefix()
+
 
 
 

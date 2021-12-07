@@ -54,7 +54,7 @@ class S3BucketConnector():
     -------------------------------------------------------------------------
     Function: read_csv_to_df(bucket, key, decoding = 'utf-8', separator = ',')
     
-    Purpose: Trasnform a csv file to a dataframe 
+    Purpose: Transform a csv file to a dataframe 
     
     Explanation:
             - Decode the csv file of the bucket
@@ -73,8 +73,9 @@ class S3BucketConnector():
     
     -------------------------------------------------------------------------
     """
-    def read_csv_to_df(self, bucket, key, decoding = 'utf-8', separator = ','):
-        csv_obj = bucket.Object(key=key).get().get('Body').read().decode(decoding)
+    def read_csv_to_df(self, key: str, encoding: str = 'utf-8', separator: str = ','):
+        self._logger.info('Reading file %s/%s/%s', self.endpoint_url, self._bucket.name, key)
+        csv_obj = self._bucket.Object(key=key).get().get('Body').read().decode(encoding)
         data = StringIO(csv_obj)
         df = pd.read_csv(data, delimiter=separator)
         return df
